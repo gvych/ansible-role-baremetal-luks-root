@@ -1,3 +1,0 @@
----
-- name: luks-root
-  src:  https://github.com/vyacheslav-gusev/baremetal-luks-root

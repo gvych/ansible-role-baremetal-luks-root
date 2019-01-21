@@ -1,9 +1,0 @@
----
-- hosts: localhost
-  gather_facts: false
-  vars_files:
-    - vault.yml
-  tasks:
-    #- debug: var=ansible_devices
-    - debug: var=vars
-    - raw: 'echo -n {{ vars["passphrase_" + inventory_hostname|regex_replace("-","_")] }}>/lib/cryptsetup/passfifo'

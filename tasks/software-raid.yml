@@ -1,0 +1,17 @@
+---
+
+- name: software-raid | create partitions
+  shell: /sbin/parted -s {{item}} {{luks_parted_script}}
+  loop: "{{luks_disks}}"
+
+- name: software-raid | create software raid (mirror)
+  shell: >
+    mdadm --create /dev/md{{ item }} --run
+    --level=1
+    --raid-devices={{luks_disks|length}}
+    --metadata=1.0
+    {{ luks_disks[0] }}{{ disks_partions_suffix }}{{ item }}
+    {{ luks_disks[1] }}{{ disks_partions_suffix }}{{ item }}
+  args:
+    creates: "/dev/{{luks_root_md}}"
+  loop: [1,2]

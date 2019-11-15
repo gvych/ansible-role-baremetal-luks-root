@@ -1,25 +1,28 @@
 ---
 # defaults file for luks-root
 luks_disks:
-  - /dev/sda
-  - /dev/sdb
-  #- /dev/sdc
-
-luks_boot_md: "md1"
-luks_root_md: "md2"
-
-luks_raids:
-  - {src: /dev/mapper/root, type: ext4}
-  - {src: "/dev/{{luks_boot_md}}", type: ext2, path: /boot}
+  - /dev/nvme1n1
+  - /dev/nvme0n1
+disks_partions_suffix: p #NVM disk contains "p" symbol in dev name
 
 luks_parted_script: >
    mklabel gpt
    disk_set pmbr_boot on
    unit GB
-   mkpart primary 3MB 200MB
+   mkpart primary 3MB 1024MB
    set 1 raid on
-   mkpart primary 200MB 100%
+   mkpart primary 1024MB 100%
    set 2 raid on
    mkpart primary 1MB 3MB
    name 3 grub
    set 3 bios_grub on
+
+luks_boot_md:    md1
+luks_root_md:    md2
+luks_mapp_name:  luks #name of LUKS mapping of encrypted device
+luks_lvm_name:   vg   #hardcoded inside Dockerfile
+luks_root_size:  100%FREE
+
+luks_mount_points:
+  - {src: "/dev/mapper/{{luks_lvm_name}}-root", type: xfs}
+  - {src: "/dev/{{luks_boot_md}}", type: ext2, path: /boot}

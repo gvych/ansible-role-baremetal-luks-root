@@ -8,10 +8,10 @@ Role Variables
 
 NVMe drives expected by default. For each server with SDD and HDD you must set two variables:
 
-   disks_partions_suffix="" 
-   luks_disks='["/dev/sdc","/dev/sdb"]'
-
-
+``` 
+disks_partions_suffix="" 
+luks_disks='["/dev/sdc","/dev/sdb"]'
+```
 
 Example Playbook
 ----------------
